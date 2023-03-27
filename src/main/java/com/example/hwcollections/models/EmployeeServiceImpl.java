@@ -18,17 +18,23 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
     // Methods for List
     @Override
-    public void addEmployee(Employee employee) {
-        if (findEmployee(employee.getFirstName(), employee.getLastName()).equals(employee) ) {
-            throw new EmployeeAlreadyAddedException("Employee " + employee.getFirstName() + " "
-                    + employee.getLastName() + " already added.");
+    public Employee addEmployee(Employee employee) {
+        try{
+            if (findEmployee(employee.getFirstName(), employee.getLastName()).equals(employee) ) {
+                throw new EmployeeAlreadyAddedException("Employee " + employee.getFirstName() + " "
+                        + employee.getLastName() + " already added.");
+            }
+        }catch (EmployeeNotFoundException ignored) {
+
         }
         employees.add(employee);
+        return employee;
     }
 
     @Override
-    public void removeEmployee(Employee employee) throws EmployeeNotFoundException {
+    public Employee removeEmployee(Employee employee) throws EmployeeNotFoundException {
         employees.remove(findEmployee(employee.getFirstName(), employee.getLastName()));
+        return employee;
     }
 
     @Override
@@ -39,7 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService{
             }
         }
 
-        throw new EmployeeNotFoundException("Employee " + firstName + " not found.");
+        throw new EmployeeNotFoundException("Employee " + firstName + " " + lastName + " not found.");
     }
 
     public List<Employee> getEmployees() {
