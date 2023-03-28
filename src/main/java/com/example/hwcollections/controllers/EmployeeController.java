@@ -1,16 +1,14 @@
 package com.example.hwcollections.controllers;
 
-import com.example.hwcollections.exceptions.EmployeeAlreadyAddedException;
-import com.example.hwcollections.exceptions.EmployeeNotFoundException;
+import com.example.hwcollections.exceptions.*;
 import com.example.hwcollections.models.Employee;
 import com.example.hwcollections.models.EmployeeService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/employee/")
 public class EmployeeController {
     private final EmployeeService employeeService;
 
@@ -18,69 +16,66 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    //добавить объект Employee и вывести его в формате JSON или сообщение об ошибке
-    @GetMapping("/employee/add")
-    public String addEmployee(@RequestParam(required = false) String firstName,
-                                @RequestParam(required = false) String lastName) {
-
-        if(firstName.isBlank() || lastName.isBlank()) {
-            return "Error! Something is missing!";
-        }
-
-        Employee employee = new Employee(firstName, lastName);
-
-        try {
-            employeeService.addEmployee(employee);
-        } catch (EmployeeAlreadyAddedException e){
-            return e.getMessage();
-        } catch (EmployeeNotFoundException ignored) {
-
-        }
-        return employee.toString();
-    }
-
-    //удалить объект Employee и вывести его в формате JSON или сообщение об ошибке
-    @GetMapping("/employee/remove")
-    public String removeEmployee(@RequestParam(required = false) String firstName,
+    //добавить объект Employee и вывести его в формате JSON
+    @GetMapping("add")
+    public Employee addEmployee(@RequestParam(required = false) String firstName,
                               @RequestParam(required = false) String lastName) {
 
-        if(firstName.isBlank() || lastName.isBlank()) {
-            return "Error! Something is missing!";
+        if(firstName == null || lastName == null || firstName.isBlank() || lastName.isBlank()) {
+            throw new MissingParametersException("Error! Something is missing");
         }
 
         Employee employee = new Employee(firstName, lastName);
 
-        try {
-            employeeService.removeEmployee(employee);
-        } catch (EmployeeNotFoundException e){
-            return e.getMessage();
-        }
-
-        return employee.toString();
+        return employeeService.addEmployee(employee);
     }
 
-    //найти объект Employee и вывести его в формате JSON или сообщение об ошибке
-    @GetMapping("/employee/find")
-    public String findEmployee(@RequestParam(required = false) String firstName,
+    // Выводим ошибку если такой работник уже существует
+    @ExceptionHandler(EmployeeAlreadyAddedException.class)
+    public String handleExceptionAdd(EmployeeAlreadyAddedException e){
+        return e.getMessage();
+    }
+
+    //удалить объект Employee и вывести его в формате JSON
+    @GetMapping("remove")
+    public Employee removeEmployee(@RequestParam(required = false) String firstName,
+                              @RequestParam(required = false) String lastName) {
+
+        if(firstName == null || lastName == null || firstName.isBlank() || lastName.isBlank()) {
+            throw new MissingParametersException("Error! Something is missing");
+        }
+
+        Employee employee = new Employee(firstName, lastName);
+
+        return employeeService.removeEmployee(employee);
+    }
+
+    // Выводим ошибку если такого работника не нашли
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    public String handleExceptionRemove(EmployeeNotFoundException e){
+        return e.getMessage();
+    }
+
+    //найти объект Employee и вывести его в формате JSON
+    @GetMapping("find")
+    public Employee findEmployee(@RequestParam(required = false) String firstName,
                                  @RequestParam(required = false) String lastName) {
 
-        if(firstName.isBlank() || lastName.isBlank()) {
-            return "Error! Something is missing!";
+        if(firstName == null || lastName == null || firstName.isBlank() || lastName.isBlank()) {
+            throw new MissingParametersException("Error! Something is missing");
         }
 
-        Employee employee;
-        try {
-            employee = employeeService.findEmployee(firstName, lastName);
-        } catch (EmployeeNotFoundException e){
-            return e.getMessage();
-        }
-
-        return employee.toString();
+        return employeeService.findEmployee(firstName, lastName);
     }
 
+    // Выводим ошибку если паратетры отсутствуют
+    @ExceptionHandler(MissingParametersException.class)
+    public String handleExceptionParams(MissingParametersException e){
+        return e.getMessage();
+    }
 
     //список всех сотрудников в формате JSON
-    @GetMapping("/show")
+    @GetMapping("show")
     public List<Employee> showAll(){
         return employeeService.getEmployees();
     }

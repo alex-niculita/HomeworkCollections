@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface EmployeeService {
     //methods for list
-    void addEmployee(Employee employee);
-    void removeEmployee(Employee employee);
+    Employee addEmployee(Employee employee);
+    Employee removeEmployee(Employee employee);
     Employee findEmployee(String firstName, String lastName);
     List<Employee> getEmployees();
     // methods for array
