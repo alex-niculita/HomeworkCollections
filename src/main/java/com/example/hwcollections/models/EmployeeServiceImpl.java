@@ -5,18 +5,25 @@ import com.example.hwcollections.exceptions.EmployeeNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
 
-    private final List<Employee> employees = new ArrayList<>();
+//    private final List<Employee> employees = new ArrayList<>();
+    private final Map<String,Employee> employees1 = new HashMap<>();
 
+    // Testing
     {
-        employees.add(new Employee("Mike","Nam"));
-        employees.add(new Employee("Alex","Wo"));
+        Employee employee = new Employee("Mike","Nam");
+        employees1.put(employee.getId(),employee);
+        Employee employee1 = new Employee("Alex","Wo");
+        employees1.put(employee1.getId(),employee1);
     }
     // Methods for List
+
     @Override
     public Employee addEmployee(Employee employee) {
         try{
@@ -27,29 +34,36 @@ public class EmployeeServiceImpl implements EmployeeService{
         }catch (EmployeeNotFoundException ignored) {
 
         }
-        employees.add(employee);
+        employees1.put(employee.getId(),employee);
         return employee;
     }
 
     @Override
     public Employee removeEmployee(Employee employee) throws EmployeeNotFoundException {
-        employees.remove(findEmployee(employee.getFirstName(), employee.getLastName()));
+        Employee employee1 = findEmployee(employee.getFirstName(), employee.getLastName());
+        employees1.remove(employee1.getId());
         return employee;
     }
 
     @Override
     public Employee findEmployee(String firstName, String lastName) {
-        for (int i = 0; i < employees.size(); i++) {
-            if (employees.get(i).getFirstName().equals(firstName) && employees.get(i).getLastName().equals(lastName)){
-                return employees.get(i);
-            }
+        Employee employee = new Employee(firstName,lastName);
+
+        if(employees1.containsValue(employee)){
+            return employee;
         }
+
+//        for (int i = 0; i < employees.size(); i++) {
+//            if (employees.get(i).getFirstName().equals(firstName) && employees.get(i).getLastName().equals(lastName)){
+//                return employees.get(i);
+//            }
+//        }
 
         throw new EmployeeNotFoundException("Employee " + firstName + " " + lastName + " not found.");
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
+    public Map<String, Employee> getEmployees() {
+        return employees1;
     }
 
     // Methods for Array

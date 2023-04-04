@@ -1,12 +1,18 @@
 package com.example.hwcollections.models;
 
 public class Employee {
+//    private static int counter;
+//
+//    private Integer id;
     private String firstName;
     private String lastName;
+    private String id;
 
     public Employee(String firstName, String lastName) {
+//        this.id = ++counter;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.id = firstName+lastName;
     }
 
     @Override
@@ -44,4 +50,9 @@ public class Employee {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getId() {
+        return id;
+    }
+
 }
