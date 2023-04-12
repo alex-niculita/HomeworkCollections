@@ -3,10 +3,20 @@ package com.example.hwcollections.controllers;
 import com.example.hwcollections.exceptions.*;
 import com.example.hwcollections.models.Employee;
 import com.example.hwcollections.models.EmployeeService;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.CommunicationException;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/employee/")
 public class EmployeeController {
@@ -30,11 +40,12 @@ public class EmployeeController {
         return employeeService.addEmployee(employee);
     }
 
-    // Выводим ошибку если такой работник уже существует
-    @ExceptionHandler(EmployeeAlreadyAddedException.class)
-    public String handleExceptionAdd(EmployeeAlreadyAddedException e){
-        return e.getMessage();
-    }
+//     Выводим ошибку если такой работник уже существует
+
+//    @ExceptionHandler(EmployeeAlreadyAddedException.class)
+//    public String handleExceptionAdd(EmployeeAlreadyAddedException e){
+//        return e.getMessage();
+//    }
 
     //удалить объект Employee и вывести его в формате JSON
     @GetMapping("remove")
@@ -76,7 +87,7 @@ public class EmployeeController {
 
     //список всех сотрудников в формате JSON
     @GetMapping("show")
-    public List<Employee> showAll(){
+    public Map<String, Employee> showAll(){
         return employeeService.getEmployees();
     }
 
