@@ -7,12 +7,25 @@ public class Employee {
     private String firstName;
     private String lastName;
     private String id;
+    private Departments department;
+    private double salary;
 
-    public Employee(String firstName, String lastName) {
+    enum Departments{
+        IT,
+        FINANCE,
+        HR,
+        SALES,
+        MARKETING
+    }
+
+
+    public Employee(String firstName, String lastName, Departments department, double salary) {
 //        this.id = ++counter;
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = firstName+lastName;
+        this.department = department;
+        this.salary = salary;
     }
 
     @Override
@@ -32,7 +45,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return String.format("{\"firstName\":\"" + firstName + "\",\"lastName\":\"" + lastName + "\"}");
+        return String.format("{\"firstName\":\"" + firstName + "\",\"lastName\":\"" + lastName + "\"department\":\"" + department + "\",\"salary\":\"" + salary + "\"}");
     }
 
     public String getFirstName() {
@@ -55,4 +68,15 @@ public class Employee {
         return id;
     }
 
+    public Departments getDepartment() {
+        return department;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
 }
