@@ -20,7 +20,7 @@ public interface EmployeeService {
 
     Employee findEmployeeWithMaxSalaryForDept(int department);
 
-    String getAllByDept();
+    Map<Employee.Departments,List<Employee>> getAllByDept();
     // methods for array
 //    void addEmployeeToArray(Employee employee);
 }

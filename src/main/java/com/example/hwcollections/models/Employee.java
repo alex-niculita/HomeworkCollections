@@ -1,6 +1,6 @@
 package com.example.hwcollections.models;
 
-public class Employee {
+public class Employee implements Comparable<Employee>{
 //    private static int counter;
 //
 //    private Integer id;
@@ -10,7 +10,7 @@ public class Employee {
     private Departments department;
     private double salary;
 
-    enum Departments{
+    public enum Departments{
         IT,
         FINANCE,
         HR,
@@ -79,4 +79,15 @@ public class Employee {
     public void setSalary(double salary) {
         this.salary = salary;
     }
+
+    @Override
+    public int compareTo(Employee employee) {
+        if(this.getSalary()<employee.getSalary()){
+            return -1;
+        } else if(this.getSalary()>employee.getSalary()){
+            return 1;
+        }
+        return 0;
+    }
+
 }

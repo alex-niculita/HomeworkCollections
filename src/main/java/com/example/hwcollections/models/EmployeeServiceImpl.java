@@ -6,6 +6,7 @@ import com.example.hwcollections.exceptions.NoEmployeesException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -106,14 +107,7 @@ public class EmployeeServiceImpl implements EmployeeService{
             throw new NoEmployeesException("No Employees found.");
         }
 
-        List<Employee> employeesInDepartment = new ArrayList<>();
-        for(Employee e: employees1.values()){
-            if (e.getDepartment().equals(department)){
-                employeesInDepartment.add(e);
-            }
-        }
-
-        return employeesInDepartment;
+        return employees1.values().stream().filter(e->e.getDepartment().equals(department)).collect(Collectors.toList());
     }
 
     // Методы для работы с отделами а не со всем массивом
@@ -128,15 +122,15 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         List<Employee> dept = getDepartment(department);
 
-        Comparator<Employee> salaryCompare = (employee1, employee2) -> {
-            if(employee1.getSalary()<employee2.getSalary()){
-                return -1;
-            } else if(employee1.getSalary()>employee2.getSalary()){
-                return 1;
-            }
-            return 0;
-        };
-        return dept.stream().min(salaryCompare).orElse(null);
+//        Comparator<Employee> salaryCompare = (employee1, employee2) -> {
+//            if(employee1.getSalary()<employee2.getSalary()){
+//                return -1;
+//            } else if(employee1.getSalary()>employee2.getSalary()){
+//                return 1;
+//            }
+//            return 0;
+//        };
+        return dept.stream().min(Employee::compareTo).orElse(null);
 
     }
 
@@ -149,30 +143,27 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         List<Employee> dept = getDepartment(department);
 
-        Comparator<Employee> salaryCompare = (employee1,employee2) -> {
-            if(employee1.getSalary()<employee2.getSalary()){
-                return -1;
-            } else if(employee1.getSalary()>employee2.getSalary()){
-                return 1;
-            }
-            return 0;
-        };
-        return dept.stream().max(salaryCompare).orElse(null);
+//        Comparator<Employee> salaryCompare = (employee1,employee2) -> {
+//            if(employee1.getSalary()<employee2.getSalary()){
+//                return -1;
+//            } else if(employee1.getSalary()>employee2.getSalary()){
+//                return 1;
+//            }
+//            return 0;
+//        };
+        return dept.stream().max(Employee::compareTo).orElse(null);
 
 
     }
 
     @Override
-    public String getAllByDept(){
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < 6; i++) {
-            sb.append("Department: ").append(convertIntToEnum(i)).append("<br>");
-
-            List<Employee> tempList = getDepartment(i);
-            tempList.forEach(e->sb.append(e.toString()).append("<br>"));
+    public Map<Employee.Departments,List<Employee>> getAllByDept(){
+        Map<Employee.Departments,List<Employee>> allByDept = new HashMap<>();
+        for (Employee.Departments department: Employee.Departments.values()){
+            allByDept.put(department,employees1.values().stream().filter(e->e.getDepartment().equals(department)).toList());
         }
 
-        return sb.toString();
+        return allByDept;
     }
 
     // Methods for Array, No longer in use! We use Maps now
