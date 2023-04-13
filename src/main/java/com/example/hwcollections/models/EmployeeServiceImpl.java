@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -159,9 +160,11 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Map<Employee.Departments,List<Employee>> getAllByDept(){
         Map<Employee.Departments,List<Employee>> allByDept = new HashMap<>();
-        for (Employee.Departments department: Employee.Departments.values()){
-            allByDept.put(department,employees1.values().stream().filter(e->e.getDepartment().equals(department)).toList());
-        }
+//        for (Employee.Departments department: Employee.Departments.values()){
+//            allByDept.put(department,employees1.values().stream().filter(e->e.getDepartment().equals(department)).toList());
+//        }
+
+        Arrays.stream(Employee.Departments.values()).forEach(d->allByDept.put(d,employees1.values().stream().filter(e->e.getDepartment().equals(d)).toList()));
 
         return allByDept;
     }
