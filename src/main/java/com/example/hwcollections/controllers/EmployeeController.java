@@ -2,6 +2,7 @@ package com.example.hwcollections.controllers;
 
 import com.example.hwcollections.exceptions.*;
 import com.example.hwcollections.models.Employee;
+import com.example.hwcollections.models.Employee.*;
 import com.example.hwcollections.models.EmployeeService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,23 +30,18 @@ public class EmployeeController {
     //добавить объект Employee и вывести его в формате JSON
     @GetMapping("add")
     public Employee addEmployee(@RequestParam(required = false) String firstName,
-                              @RequestParam(required = false) String lastName) {
+                                @RequestParam(required = false) String lastName,
+                                @RequestParam(required = false) int department,
+                                @RequestParam(required = false) double salary) {
 
         if(firstName == null || lastName == null || firstName.isBlank() || lastName.isBlank()) {
             throw new MissingParametersException("Error! Something is missing");
         }
 
-        Employee employee = new Employee(firstName, lastName);
+        Employee employee = new Employee(firstName, lastName, employeeService.convertIntToEnum(department), salary);
 
         return employeeService.addEmployee(employee);
     }
-
-//     Выводим ошибку если такой работник уже существует
-
-//    @ExceptionHandler(EmployeeAlreadyAddedException.class)
-//    public String handleExceptionAdd(EmployeeAlreadyAddedException e){
-//        return e.getMessage();
-//    }
 
     //удалить объект Employee и вывести его в формате JSON
     @GetMapping("remove")
@@ -56,9 +52,7 @@ public class EmployeeController {
             throw new MissingParametersException("Error! Something is missing");
         }
 
-        Employee employee = new Employee(firstName, lastName);
-
-        return employeeService.removeEmployee(employee);
+        return employeeService.removeEmployee(firstName, lastName);
     }
 
     // Выводим ошибку если такого работника не нашли
@@ -75,6 +69,8 @@ public class EmployeeController {
         if(firstName == null || lastName == null || firstName.isBlank() || lastName.isBlank()) {
             throw new MissingParametersException("Error! Something is missing");
         }
+
+
 
         return employeeService.findEmployee(firstName, lastName);
     }
