@@ -2,12 +2,9 @@ package com.example.hwcollections.models;
 
 import com.example.hwcollections.exceptions.EmployeeAlreadyAddedException;
 import com.example.hwcollections.exceptions.EmployeeNotFoundException;
-import com.example.hwcollections.exceptions.NoEmployeesException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -95,79 +92,79 @@ public class EmployeeServiceImpl implements EmployeeService{
     // Methods for Departments
 
     // Для того чтобы работать с каждым отделом по отдельности будем работников отдела записывать в отдельный массив и его возвращать этим методом
-    @Override
-    public List<Employee> getDepartment(int departmentN) {
-
-        if(employees1.isEmpty()){
-            throw new NoEmployeesException("No Employees found.");
-        }
-
-        Employee.Departments department = convertIntToEnum(departmentN);
-
-        if(department == null) { // если такого отдела нет то выходим и возвращаем null
-            throw new NoEmployeesException("No Employees found.");
-        }
-
-        return employees1.values().stream().filter(e->e.getDepartment().equals(department)).collect(Collectors.toList());
-    }
-
-    // Методы для работы с отделами а не со всем массивом
-
-
-    @Override
-    public Employee findEmployeeWithMinSalaryForDept(int department) {
-
-        if(employees1.isEmpty()){
-            throw new NoEmployeesException("No Employees found.");
-        }
-
-        List<Employee> dept = getDepartment(department);
-
-//        Comparator<Employee> salaryCompare = (employee1, employee2) -> {
-//            if(employee1.getSalary()<employee2.getSalary()){
-//                return -1;
-//            } else if(employee1.getSalary()>employee2.getSalary()){
-//                return 1;
-//            }
-//            return 0;
-//        };
-        return dept.stream().min(Employee::compareTo).orElse(null);
-
-    }
-
-    @Override
-    public Employee findEmployeeWithMaxSalaryForDept(int department) {
-
-        if(employees1.isEmpty()){
-            throw new NoEmployeesException("No Employees found.");
-        }
-
-        List<Employee> dept = getDepartment(department);
-
-//        Comparator<Employee> salaryCompare = (employee1,employee2) -> {
-//            if(employee1.getSalary()<employee2.getSalary()){
-//                return -1;
-//            } else if(employee1.getSalary()>employee2.getSalary()){
-//                return 1;
-//            }
-//            return 0;
-//        };
-        return dept.stream().max(Employee::compareTo).orElse(null);
-
-
-    }
-
-    @Override
-    public Map<Employee.Departments,List<Employee>> getAllByDept(){
-        Map<Employee.Departments,List<Employee>> allByDept = new HashMap<>();
-//        for (Employee.Departments department: Employee.Departments.values()){
-//            allByDept.put(department,employees1.values().stream().filter(e->e.getDepartment().equals(department)).toList());
+//    @Override
+//    public List<Employee> getDepartment(int departmentN) {
+//
+//        if(employees1.isEmpty()){
+//            throw new NoEmployeesException("No Employees found.");
 //        }
-
-        Arrays.stream(Employee.Departments.values()).forEach(d->allByDept.put(d,employees1.values().stream().filter(e->e.getDepartment().equals(d)).toList()));
-
-        return allByDept;
-    }
+//
+//        Employee.Departments department = convertIntToEnum(departmentN);
+//
+//        if(department == null) { // если такого отдела нет то выходим и возвращаем null
+//            throw new NoEmployeesException("No Employees found.");
+//        }
+//
+//        return employees1.values().stream().filter(e->e.getDepartment().equals(department)).collect(Collectors.toList());
+//    }
+//
+//    // Методы для работы с отделами а не со всем массивом
+//
+//
+//    @Override
+//    public Employee findEmployeeWithMinSalaryForDept(int department) {
+//
+//        if(employees1.isEmpty()){
+//            throw new NoEmployeesException("No Employees found.");
+//        }
+//
+//        List<Employee> dept = getDepartment(department);
+//
+////        Comparator<Employee> salaryCompare = (employee1, employee2) -> {
+////            if(employee1.getSalary()<employee2.getSalary()){
+////                return -1;
+////            } else if(employee1.getSalary()>employee2.getSalary()){
+////                return 1;
+////            }
+////            return 0;
+////        };
+//        return dept.stream().min(Employee::compareTo).orElse(null);
+//
+//    }
+//
+//    @Override
+//    public Employee findEmployeeWithMaxSalaryForDept(int department) {
+//
+//        if(employees1.isEmpty()){
+//            throw new NoEmployeesException("No Employees found.");
+//        }
+//
+//        List<Employee> dept = getDepartment(department);
+//
+////        Comparator<Employee> salaryCompare = (employee1,employee2) -> {
+////            if(employee1.getSalary()<employee2.getSalary()){
+////                return -1;
+////            } else if(employee1.getSalary()>employee2.getSalary()){
+////                return 1;
+////            }
+////            return 0;
+////        };
+//        return dept.stream().max(Employee::compareTo).orElse(null);
+//
+//
+//    }
+//
+//    @Override
+//    public Map<Employee.Departments,List<Employee>> getAllByDept(){
+//        Map<Employee.Departments,List<Employee>> allByDept = new HashMap<>();
+////        for (Employee.Departments department: Employee.Departments.values()){
+////            allByDept.put(department,employees1.values().stream().filter(e->e.getDepartment().equals(department)).toList());
+////        }
+//
+//        Arrays.stream(Employee.Departments.values()).forEach(d->allByDept.put(d,employees1.values().stream().filter(e->e.getDepartment().equals(d)).toList()));
+//
+//        return allByDept;
+//    }
 
     // Methods for Array, No longer in use! We use Maps now
 
