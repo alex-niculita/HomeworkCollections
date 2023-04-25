@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,28 +33,14 @@ public class EmployeeController {
     @GetMapping("add")
     public Employee addEmployee(@RequestParam(required = false) String firstName,
                                 @RequestParam(required = false) String lastName,
-                                @RequestParam(required = false) int department,
-                                @RequestParam(required = false) double salary) {
+                                @RequestParam(required = false) Integer department,
+                                @RequestParam(required = false) Double salary) {
 
-        if(StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName)) {
+        if(StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) || department == null || salary == null) {
             throw new MissingParametersException("Error! Something is missing");
         }
 
-        if(!StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(firstName)) {
-            throw new WrongEntryException("Error! Something is missing");
-        }
-
-        if(StringUtils.isAllLowerCase(firstName)) {
-            firstName = StringUtils.capitalize(firstName);
-        }
-
-        if(StringUtils.isAllLowerCase(lastName)) {
-            lastName = StringUtils.capitalize(lastName);
-        }
-
-        Employee employee = new Employee(firstName, lastName, employeeService.convertIntToEnum(department), salary);
-
-        return employeeService.addEmployee(employee);
+        return employeeService.addEmployee(firstName, lastName, employeeService.convertIntToEnum(department), salary);
     }
 
     //удалить объект Employee и вывести его в формате JSON
