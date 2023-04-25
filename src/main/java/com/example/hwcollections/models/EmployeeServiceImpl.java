@@ -2,9 +2,12 @@ package com.example.hwcollections.models;
 
 import com.example.hwcollections.exceptions.EmployeeAlreadyAddedException;
 import com.example.hwcollections.exceptions.EmployeeNotFoundException;
+import com.example.hwcollections.exceptions.WrongEntryException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -49,7 +52,19 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee addEmployee(Employee employee) {
+    public Employee addEmployee(String firstName, String lastName, Employee.Departments department, double salary) {
+
+        checkString(firstName, lastName);
+
+//        if(!StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(lastName)) {
+//            throw new WrongEntryException("Error! Wrong String");
+//        }
+//
+        firstName = StringUtils.capitalize(firstName.toLowerCase());
+        lastName = StringUtils.capitalize(lastName.toLowerCase());
+
+        Employee employee = new Employee(firstName, lastName, department, salary);
+
         try{
             if (findEmployee(employee.getFirstName(), employee.getLastName()).equals(employee) ) {
                 throw new EmployeeAlreadyAddedException("Employee " + employee.getFirstName() + " "
@@ -63,7 +78,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee removeEmployee(String firstName, String lastName) throws EmployeeNotFoundException {
+    public Employee removeEmployee(String firstName, String lastName) {
+        checkString(firstName, lastName);
         Employee employee1 = findEmployee(firstName, lastName);
         employees1.remove(employee1.getId());
         return employee1;
@@ -88,6 +104,14 @@ public class EmployeeServiceImpl implements EmployeeService{
     public Map<String, Employee> getEmployees() {
         return employees1;
     }
+
+    @Override
+    public void checkString(String firstName, String lastName) {
+        if(!StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(lastName)) {
+            throw new WrongEntryException("Error! Wrong String");
+        }
+    }
+
 
     // Methods for Departments
 
