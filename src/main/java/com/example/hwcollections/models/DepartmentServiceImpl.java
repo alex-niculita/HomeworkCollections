@@ -1,6 +1,7 @@
 package com.example.hwcollections.models;
 
 import com.example.hwcollections.exceptions.NoEmployeesException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.hwcollections.models.Employee;
 import java.util.*;
