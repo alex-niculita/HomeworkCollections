@@ -1,5 +1,6 @@
 package com.example.hwcollections.models;
 
+import com.example.hwcollections.exceptions.NoDepartmentException;
 import com.example.hwcollections.exceptions.NoEmployeesException;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +37,8 @@ public class DepartmentsServiceImpl implements DepartmentsService {
 
         Employee.Departments department = convertIntToEnum(departmentN);
 
-        if(department == null) { // если такого отдела нет то выходим и возвращаем null
-            throw new NoEmployeesException("No Employees found.");
+        if(department == null) {
+            throw new NoDepartmentException("Department " + departmentN + " is not found.");
         }
 
         return employeeService.getEmployees().values().stream().filter(e->e.getDepartment().equals(department)).collect(Collectors.toList());
@@ -47,6 +48,12 @@ public class DepartmentsServiceImpl implements DepartmentsService {
 
     @Override
     public Employee findEmployeeWithMinSalaryForDept(int department) {
+
+        Employee.Departments d = convertIntToEnum(department);
+
+        if(d == null) {
+            throw new NoDepartmentException("Department " + department + " is not found.");
+        }
 
         if(employeeService.getEmployees().isEmpty()){
             throw new NoEmployeesException("No Employees found.");
@@ -61,6 +68,12 @@ public class DepartmentsServiceImpl implements DepartmentsService {
 
     @Override
     public Employee findEmployeeWithMaxSalaryForDept(int department) {
+
+        Employee.Departments d = convertIntToEnum(department);
+
+        if(d == null) {
+            throw new NoDepartmentException("Department " + department + " is not found.");
+        }
 
         if(employeeService.getEmployees().isEmpty()){
             throw new NoEmployeesException("No Employees found.");

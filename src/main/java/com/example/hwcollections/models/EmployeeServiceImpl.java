@@ -2,6 +2,7 @@ package com.example.hwcollections.models;
 
 import com.example.hwcollections.exceptions.EmployeeAlreadyAddedException;
 import com.example.hwcollections.exceptions.EmployeeNotFoundException;
+import com.example.hwcollections.exceptions.NoEmployeesException;
 import com.example.hwcollections.exceptions.WrongEntryException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -102,7 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     public Map<String, Employee> getEmployees() {
-
+        if (employees1.isEmpty()) throw new NoEmployeesException("No Employees found.");
         return employees1;
     }
 
