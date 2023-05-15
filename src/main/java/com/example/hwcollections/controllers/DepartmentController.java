@@ -1,51 +1,64 @@
 package com.example.hwcollections.controllers;
 
-
-import com.example.hwcollections.exceptions.MissingParametersException;
 import com.example.hwcollections.models.DepartmentService;
 import com.example.hwcollections.models.Employee;
-import com.example.hwcollections.models.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 @RestController
-@RequestMapping("/departments/")
+@RequestMapping("/department/")
 public class DepartmentController {
 
+    // Bean
     private final DepartmentService departmentService;
 
-        public DepartmentController(DepartmentService departmentService) {
+    public DepartmentController(DepartmentService departmentService) {
         this.departmentService = departmentService;
     }
-    @GetMapping("max-salary")
-    public Employee maxSalary(@RequestParam int department) {
 
-        return departmentService.findEmployeeWithMaxSalaryForDept(department);
+//    GET http://localhost:8080/department/{id}/employees
+// — возвращает список сотрудников по департаменту.
+
+    @GetMapping("{id}/employees")
+    public List<Employee> getDepartmentEmployees (@PathVariable Integer id) {
+        return departmentService.getEmployees(id);
     }
 
-    @GetMapping("min-salary")
-    public Employee minSalary(@RequestParam int department) {
+//GET http://localhost:8080/department/{id}/salary/sum
+// — возвращает сумму зарплат по департаменту.
 
-        return departmentService.findEmployeeWithMinSalaryForDept(department);
+    @GetMapping("{id}/salary/sum")
+    public double getDepartmentSalarySum(@PathVariable Integer id) {
+        return departmentService.getSalarySum(id);
     }
 
-    @GetMapping(path = "all", params = "department")
-    public List<Employee> allDept(@RequestParam int department) {
+//GET http://localhost:8080/department/{id}/salary/max
+// — возвращает максимальную зарплату по департаменту.
 
-        return departmentService.getDepartment(department);
+    @GetMapping("{id}/salary/max")
+    public double getDepartmentMaxSalary(@PathVariable Integer id) {
+        return departmentService.getMaxSalary(id);
     }
 
-    @GetMapping("all")
-    public Map<Employee.Departments, List<Employee>> all() {
-        return departmentService.getAllByDept();
+//GET http://localhost:8080/department/{id}/salary/min
+// — возвращает минимальную зарплату по департаменту.
+
+    @GetMapping("{id}/salary/min")
+    public double getDepartmentMinSalary(@PathVariable Integer id) {
+        return departmentService.getMinSalary(id);
+    }
+
+//GET http://localhost:8080/department/employees
+// — возвращает сотрудников, сгруппированых по отделам в виде Map<Integer,List<Employees>>, где ключ — это номер отдела, а значение — список сотрудников данного отдела.
+
+    @GetMapping("employees")
+    public Map<Integer,List<Employee>> getAllDepartments() {
+        return departmentService.getAll();
     }
 
 }
