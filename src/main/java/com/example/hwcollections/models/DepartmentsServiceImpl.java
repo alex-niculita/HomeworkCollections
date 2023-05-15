@@ -89,8 +89,8 @@ public class DepartmentsServiceImpl implements DepartmentsService {
     @Override
     public Map<Employee.Departments,List<Employee>> getAllByDept(){
         Map<Employee.Departments,List<Employee>> allByDept = new HashMap<>();
-
-        Arrays.stream(Employee.Departments.values()).forEach(d->allByDept.put(d,employeeService.getEmployees().values().stream().filter(e->e.getDepartment().equals(d)).toList()));
+        Map<String, Employee> employees = employeeService.getEmployees();
+        Arrays.stream(Employee.Departments.values()).forEach(d->allByDept.put(d,employees.values().stream().filter(e->e.getDepartment().equals(d)).toList()));
 
         return allByDept;
     }

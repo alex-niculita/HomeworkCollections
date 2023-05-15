@@ -42,25 +42,19 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Map<Integer, List<Employee>> getAll() {
-        Map<Employee.Departments,List<Employee>> allByDept = new HashMap<>();
+        Map<Integer,List<Employee>> allByDept = new HashMap<>();
 
-        Arrays.stream(Employee.Departments.values()).forEach(d->allByDept.put(d,employeeService.getEmployees().values().stream().filter(e->e.getDepartment().equals(d)).toList()));
-        Map<Integer, List<Employee>> companyInts = new HashMap<>();
+        // I use enum as a department. This Map helps convert enum Employee.Departments to Integer to comply with the task to get Map<Integer, List<Employee>>
+        Map<Employee.Departments,Integer> convertEnumToInt = new HashMap<>();
+        convertEnumToInt.put(Employee.Departments.IT, 1);
+        convertEnumToInt.put(Employee.Departments.FINANCE, 2);
+        convertEnumToInt.put(Employee.Departments.HR, 3);
+        convertEnumToInt.put(Employee.Departments.SALES, 4);
+        convertEnumToInt.put(Employee.Departments.MARKETING, 5);
 
-//        Convert enum Employee.Departments to Integer to comply with the task to get Map<Integer, List<Employee>>
-        allByDept.keySet().stream().mapToInt(DepartmentServiceImpl::convertEnumToInt).forEach(i->companyInts.put(i,departmentsService.getDepartment(i)));
+        Arrays.stream(Employee.Departments.values()).forEach(d->allByDept.put(convertEnumToInt.get(d),employeeService.getEmployees().values().stream().filter(e->e.getDepartment().equals(d)).toList()));
 
-        return companyInts;
+        return allByDept;
     }
 
-    public static Integer convertEnumToInt(Employee.Departments enm) {
-
-        return switch (enm) {
-            case IT -> 1;
-            case FINANCE -> 2;
-            case HR -> 3;
-            case SALES -> 4;
-            case MARKETING -> 5;
-        };
-    }
 }
