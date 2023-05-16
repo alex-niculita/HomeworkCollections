@@ -2,16 +2,16 @@ package com.example.hwcollections.models;
 
 import com.example.hwcollections.exceptions.NoEmployeesException;
 import org.springframework.stereotype.Service;
-import com.example.hwcollections.models.Employee;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class DepartmentServiceImpl implements DepartmentService{
+public class DepartmentsServiceImpl implements DepartmentsService {
 
     private final EmployeeService employeeService;
 
-    public DepartmentServiceImpl(EmployeeService employeeService) {
+    public DepartmentsServiceImpl(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
