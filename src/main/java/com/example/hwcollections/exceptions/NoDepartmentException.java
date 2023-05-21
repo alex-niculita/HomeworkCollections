@@ -4,4 +4,3 @@ public class NoDepartmentException extends RuntimeException{
     public NoDepartmentException(String message) {
         super(message);
     }
-}
