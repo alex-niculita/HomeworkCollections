@@ -1,5 +1,7 @@
 package com.example.hwcollections.models;
 
+import org.springframework.web.bind.annotation.PathVariable;
+
 import java.util.List;
 import java.util.Map;
 
